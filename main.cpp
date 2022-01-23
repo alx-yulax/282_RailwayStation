@@ -34,23 +34,18 @@ public:
     RailwayStation() : train(nullptr) {}
 
     void arrived(Train *inTrain) {
+        railwayStationAccess.lock();
         std::cout << "Train #" << inTrain->getName() << "  has arrived" << std::endl;
-
         if (train == nullptr) {
-            railwayStationAccess.lock();
             train = inTrain;
-            railwayStationAccess.unlock();
         } else {
             std::cout << "train #" << inTrain->getName() << "  is waiting";
         }
-
+        railwayStationAccess.unlock();
     }
 
-    void depart(Train *inTrain) {
+    void depart() {
         railwayStationAccess.lock();
-        if (train == nullptr) {
-            train = inTrain;
-        }
         std::cout << "Train #" << train->getName() << "  at the station now" << std::endl;
         std::string command;
         do {
@@ -71,7 +66,7 @@ void go(RailwayStation *railwayStation, Train *train) {
 
     railwayStation->arrived(train);
 
-    railwayStation->depart(train);
+    railwayStation->depart();
 
 }
 
