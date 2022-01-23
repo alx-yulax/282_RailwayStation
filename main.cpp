@@ -29,15 +29,15 @@ public:
 };
 
 class RailwayStation {
-    Train *train;
+    Train *trainAtStation;
 public:
-    RailwayStation() : train(nullptr) {}
+    RailwayStation() : trainAtStation(nullptr) {}
 
     void arrived(Train *inTrain) {
         railwayStationAccess.lock();
         std::cout << "Train #" << inTrain->getName() << "  has arrived" << std::endl;
-        if (train == nullptr) {
-            train = inTrain;
+        if (trainAtStation == nullptr) {
+            trainAtStation = inTrain;
         } else {
             std::cout << "train #" << inTrain->getName() << "  is waiting";
         }
@@ -46,15 +46,15 @@ public:
 
     void depart() {
         railwayStationAccess.lock();
-        std::cout << "Train #" << train->getName() << "  at the station now" << std::endl;
+        std::cout << "Train #" << trainAtStation->getName() << "  at the station now" << std::endl;
         std::string command;
         do {
             std::cout << "Input command (depart): ";
             std::cin >> command;
         } while (command != "depart");
 
-        std::cout << "Train #" << train->getName() << "  has depart" << std::endl << std::endl;
-        train = nullptr;
+        std::cout << "Train #" << trainAtStation->getName() << "  has depart" << std::endl << std::endl;
+        trainAtStation = nullptr;
         railwayStationAccess.unlock();
 
     }
